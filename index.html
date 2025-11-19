@@ -1,221 +1,250 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financiero</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body { background-color: #f8fafc; font-family: sans-serif; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="es"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Dashboard Financiero&lt;/title&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/react@18/umd/react.development.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/@supabase/supabase-js@2"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"&gt;&lt;/script&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body { background-color: #f8fafc; font-family: sans-serif; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="root"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script type="text/babel"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const { useState, useMemo, useEffect } = React;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const { createClient } = supabase;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } = Recharts;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// CREDENCIALES</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const supabaseUrl = 'http://127.0.0.1:54321';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Mapeo</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const CONCEPT_MAPPING = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"EROGACIONES POR REMUNERACIONES AL TRABAJO PERSONAL": "Remuneraciones",</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"IMPUESTO SOBRE LA PRESTACIÓN DE SERVICIOS DE HOSPEDAJE": "Hospedaje"</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Utilidades</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const formatCurrency = (val) =&gt; new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 }).format(val || 0);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const formatCompactNumber = (num) =&gt; new Intl.NumberFormat('es-MX', { notation: "compact", compactDisplay: "short", style: 'currency', currency: 'MXN' }).format(num);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const getMonthName = (m) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!m) return "";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const date = new Date(2000, m - 1, 1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const name = date.toLocaleString('es-MX', { month: 'long' });</p>
-<p class="p1"><span class="Apple-converted-space">            </span>return name.charAt(0).toUpperCase() + name.slice(1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Componentes</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const KPICard = ({ title, amount, percentage, subtext }) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="flex justify-between items-start mb-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="p-2 bg-slate-50 rounded-lg border border-slate-100 text-slate-700 font-bold"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>$ &lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{percentage &amp;&amp; percentage !== "0" &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>{percentage}%</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1"&gt;{title}&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="text-2xl font-bold text-slate-900 tracking-tight"&gt;{amount}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{subtext &amp;&amp; &lt;p className="text-xs text-slate-400 mt-2"&gt;{subtext}&lt;/p&gt;}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const CustomTooltip = ({ active, payload, label }) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (active &amp;&amp; payload &amp;&amp; payload.length) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="bg-slate-900 text-white p-3 rounded-lg shadow-xl border border-slate-700 text-xs z-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p className="font-semibold mb-2 border-b border-slate-700 pb-1"&gt;{label}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>{payload.map((entry, index) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div key={index} className="flex items-center justify-between gap-4 mb-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span style={{ color: entry.color }}&gt;{entry.name}:&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span className="font-mono"&gt;{formatCurrency(entry.value)}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>return null;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// App Principal</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function App() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const [filterYear, setFilterYear] = useState('ALL');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const [dbData, setDbData] = useState([]);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const [loading, setLoading] = useState(true);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const [error, setError] = useState(null);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const fetchData = async () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>setLoading(true);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const { data, error } = await supabaseClient</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>.from('ingresos_v1')</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>.select('ejercicio_fiscal, mes, concepto, total_recaudado');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>if (error) throw error;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const transformedData = data.map(item =&gt; ({</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>year: Number(item.ejercicio_fiscal),</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>month: Number(item.mes),</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>concept: item.concepto,</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>amount: Number(item.total_recaudado)</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}));</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>setDbData(transformedData);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} catch (err) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>console.error(err);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>setError(err.message);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} finally {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>setLoading(false);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>fetchData();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>const channel = supabaseClient</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>.channel('realtime_ingresos')</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>.on('postgres_changes', { event: '*', schema: 'public', table: 'ingresos_v1' }, () =&gt; fetchData())</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>.subscribe();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>return () =&gt; { supabaseClient.removeChannel(channel); };</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, []);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const processedData = useMemo(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (loading || error) return [];</p>
-<p class="p1"><span class="Apple-converted-space">                </span>let data = dbData.map((item, index) =&gt; ({</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>...item,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>id: index,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>shortConcept: CONCEPT_MAPPING[item.concept] || item.concept,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dateLabel: `${getMonthName(item.month)} ${item.year}`</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}));</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return data.sort((a, b) =&gt; (a.year !== b.year) ? b.year - a.year : b.month - a.month);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, [dbData, loading, error]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const tableData = useMemo(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (filterYear === 'ALL') return processedData;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return processedData.filter(d =&gt; d.year.toString() === filterYear);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, [processedData, filterYear]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const kpis = useMemo(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const sourceData = tableData;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const totalRevenue = sourceData.reduce((acc, curr) =&gt; acc + (curr.amount || 0), 0);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const remuneraciones = sourceData.filter(d =&gt; d.concept &amp;&amp; d.concept.includes("REMUNERACIONES")).reduce((acc, curr) =&gt; acc + (curr.amount || 0), 0);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const hospedaje = sourceData.filter(d =&gt; d.concept &amp;&amp; d.concept.includes("HOSPEDAJE")).reduce((acc, curr) =&gt; acc + (curr.amount || 0), 0);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>return {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>total: totalRevenue,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>remuneraciones: { amount: remuneraciones, percent: totalRevenue ? ((remuneraciones / totalRevenue) * 100).toFixed(1) : 0 },</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>hospedaje: { amount: hospedaje, percent: totalRevenue ? ((hospedaje / totalRevenue) * 100).toFixed(1) : 0 }</p>
-<p class="p1"><span class="Apple-converted-space">                </span>};</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, [tableData]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const stackedBarData = useMemo(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const grouped = {};</p>
-<p class="p1"><span class="Apple-converted-space">                </span>processedData.forEach(item =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (!grouped[item.year]) grouped[item.year] = { year: item.year, Remuneraciones: 0, Hospedaje: 0 };</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (item.concept.includes("REMUNERACIONES")) grouped[item.year].Remuneraciones += item.amount;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>else grouped[item.year].Hospedaje += item.amount;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return Object.values(grouped).sort((a, b) =&gt; a.year - b.year);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, [processedData]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const trendLineData = useMemo(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const monthMap = {};</p>
-<p class="p1"><span class="Apple-converted-space">                </span>for(let i=1; i&lt;=12; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const mName = getMonthName(i);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>monthMap[i] = { month: i, name: mName.substring(0,3), '2023': 0, '2024': 0, '2025': 0 };</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>processedData.forEach(item =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (monthMap[item.month]) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>const yearKey = item.year.toString();</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>if (monthMap[item.month][yearKey] === undefined) monthMap[item.month][yearKey] = 0;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>monthMap[item.month][yearKey] += item.amount;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return Object.values(monthMap);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, [processedData]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (loading) return &lt;div className="min-h-screen flex items-center justify-center"&gt;&lt;div className="loader"&gt;&lt;/div&gt;&lt;/div&gt;;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="p-8 max-w-7xl mx-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;header className="flex justify-between items-center mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h1 className="text-3xl font-bold text-slate-900"&gt;Tablero de Recaudación&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p className="text-slate-500 text-sm mt-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>{error ? &lt;span className="text-red-500"&gt;Error: {error}&lt;/span&gt; : "Conectado a Supabase Local"}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;select className="border rounded p-2" value={filterYear} onChange={(e) =&gt; setFilterYear(e.target.value)}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option value="ALL"&gt;Todos los años&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option value="2025"&gt;2025&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option value="2024"&gt;2024&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option value="2023"&gt;2023&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="grid grid-cols-1</p>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+        const { createClient } = supabase;
+        const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } = Recharts;
+
+        // CREDENCIALES
+        const supabaseUrl = 'http://127.0.0.1:54321';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
+        const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+
+        // Mapeo
+        const CONCEPT_MAPPING = {
+            "EROGACIONES POR REMUNERACIONES AL TRABAJO PERSONAL": "Remuneraciones",
+            "IMPUESTO SOBRE LA PRESTACIÓN DE SERVICIOS DE HOSPEDAJE": "Hospedaje"
+        };
+
+        // Utilidades
+        const formatCurrency = (val) => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 }).format(val || 0);
+        const formatCompactNumber = (num) => new Intl.NumberFormat('es-MX', { notation: "compact", compactDisplay: "short", style: 'currency', currency: 'MXN' }).format(num);
+        const getMonthName = (m) => {
+            if (!m) return "";
+            const date = new Date(2000, m - 1, 1);
+            const name = date.toLocaleString('es-MX', { month: 'long' });
+            return name.charAt(0).toUpperCase() + name.slice(1);
+        };
+
+        // Componentes
+        const KPICard = ({ title, amount, percentage, subtext }) => (
+            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                <div className="flex justify-between items-start mb-4">
+                    <div className="p-2 bg-slate-50 rounded-lg border border-slate-100 text-slate-700 font-bold">
+                       $ </div>
+                    {percentage && percentage !== "0" && (
+                        <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100">
+                            {percentage}%
+                        </span>
+                    )}
+                </div>
+                <div>
+                    <h3 className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">{title}</h3>
+                    <div className="text-2xl font-bold text-slate-900 tracking-tight">{amount}</div>
+                    {subtext && <p className="text-xs text-slate-400 mt-2">{subtext}</p>}
+                </div>
+            </div>
+        );
+
+        const CustomTooltip = ({ active, payload, label }) => {
+            if (active && payload && payload.length) {
+                return (
+                    <div className="bg-slate-900 text-white p-3 rounded-lg shadow-xl border border-slate-700 text-xs z-50">
+                        <p className="font-semibold mb-2 border-b border-slate-700 pb-1">{label}</p>
+                        {payload.map((entry, index) => (
+                            <div key={index} className="flex items-center justify-between gap-4 mb-1">
+                                <span style={{ color: entry.color }}>{entry.name}:</span>
+                                <span className="font-mono">{formatCurrency(entry.value)}</span>
+                            </div>
+                        ))}
+                    </div>
+                );
+            }
+            return null;
+        };
+
+        // App Principal
+        function App() {
+            const [filterYear, setFilterYear] = useState('ALL');
+            const [dbData, setDbData] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                const fetchData = async () => {
+                    try {
+                        setLoading(true);
+                        const { data, error } = await supabaseClient
+                            .from('ingresos_v1')
+                            .select('ejercicio_fiscal, mes, concepto, total_recaudado');
+
+                        if (error) throw error;
+
+                        const transformedData = data.map(item => ({
+                            year: Number(item.ejercicio_fiscal),
+                            month: Number(item.mes),
+                            concept: item.concepto,
+                            amount: Number(item.total_recaudado)
+                        }));
+                        setDbData(transformedData);
+                    } catch (err) {
+                        console.error(err);
+                        setError(err.message);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+
+                fetchData();
+
+                const channel = supabaseClient
+                    .channel('realtime_ingresos')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'ingresos_v1' }, () => fetchData())
+                    .subscribe();
+
+                return () => { supabaseClient.removeChannel(channel); };
+            }, []);
+
+            const processedData = useMemo(() => {
+                if (loading || error) return [];
+                let data = dbData.map((item, index) => ({
+                    ...item,
+                    id: index,
+                    shortConcept: CONCEPT_MAPPING[item.concept] || item.concept,
+                    dateLabel: `${getMonthName(item.month)} ${item.year}`
+                }));
+                return data.sort((a, b) => (a.year !== b.year) ? b.year - a.year : b.month - a.month);
+            }, [dbData, loading, error]);
+
+            const tableData = useMemo(() => {
+                if (filterYear === 'ALL') return processedData;
+                return processedData.filter(d => d.year.toString() === filterYear);
+            }, [processedData, filterYear]);
+
+            const kpis = useMemo(() => {
+                const sourceData = tableData;
+                const totalRevenue = sourceData.reduce((acc, curr) => acc + (curr.amount || 0), 0);
+                const remuneraciones = sourceData.filter(d => d.concept && d.concept.includes("REMUNERACIONES")).reduce((acc, curr) => acc + (curr.amount || 0), 0);
+                const hospedaje = sourceData.filter(d => d.concept && d.concept.includes("HOSPEDAJE")).reduce((acc, curr) => acc + (curr.amount || 0), 0);
+
+                return {
+                    total: totalRevenue,
+                    remuneraciones: { amount: remuneraciones, percent: totalRevenue ? ((remuneraciones / totalRevenue) * 100).toFixed(1) : 0 },
+                    hospedaje: { amount: hospedaje, percent: totalRevenue ? ((hospedaje / totalRevenue) * 100).toFixed(1) : 0 }
+                };
+            }, [tableData]);
+
+            const stackedBarData = useMemo(() => {
+                const grouped = {};
+                processedData.forEach(item => {
+                    if (!grouped[item.year]) grouped[item.year] = { year: item.year, Remuneraciones: 0, Hospedaje: 0 };
+                    if (item.concept.includes("REMUNERACIONES")) grouped[item.year].Remuneraciones += item.amount;
+                    else grouped[item.year].Hospedaje += item.amount;
+                });
+                return Object.values(grouped).sort((a, b) => a.year - b.year);
+            }, [processedData]);
+
+            const trendLineData = useMemo(() => {
+                const monthMap = {};
+                for(let i=1; i<=12; i++) {
+                    const mName = getMonthName(i);
+                    monthMap[i] = { month: i, name: mName.substring(0,3), '2023': 0, '2024': 0, '2025': 0 };
+                }
+                processedData.forEach(item => {
+                    if (monthMap[item.month]) {
+                        const yearKey = item.year.toString();
+                        if (monthMap[item.month][yearKey] === undefined) monthMap[item.month][yearKey] = 0;
+                        monthMap[item.month][yearKey] += item.amount;
+                    }
+                });
+                return Object.values(monthMap);
+            }, [processedData]);
+
+            if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="loader"></div></div>;
+
+            return (
+                <div className="p-8 max-w-7xl mx-auto">
+                    <header className="flex justify-between items-center mb-8">
+                        <div>
+                            <h1 className="text-3xl font-bold text-slate-900">Tablero de Recaudación</h1>
+                            <p className="text-slate-500 text-sm mt-1">
+                                {error ? <span className="text-red-500">Error: {error}</span> : "Conectado a Supabase Local"}
+                            </p>
+                        </div>
+                        <select className="border rounded p-2" value={filterYear} onChange={(e) => setFilterYear(e.target.value)}>
+                            <option value="ALL">Todos los años</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </header>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <KPICard title="Recaudación Total" amount={formatCurrency(kpis.total)} subtext={filterYear === 'ALL' ? "Histórico" : `Año ${filterYear}`} />
+                        <KPICard title="Remuneraciones" amount={formatCurrency(kpis.remuneraciones.amount)} percentage={kpis.remuneraciones.percent} subtext="Nómina" />
+                        <KPICard title="Hospedaje" amount={formatCurrency(kpis.hospedaje.amount)} percentage={kpis.hospedaje.percent} subtext="Hoteleros" />
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm h-80">
+                            <h3 className="font-semibold mb-4">Comparativa Anual</h3>
+                            <ResponsiveContainer width="100%" height="90%">
+                                <BarChart data={stackedBarData}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                    <XAxis dataKey="year" />
+                                    <YAxis tickFormatter={(val) => new Intl.NumberFormat('es-MX', { notation: "compact" }).format(val)} />
+                                    <Tooltip content={<CustomTooltip />} />
+                                    <Legend />
+                                    <Bar name="Remuneraciones" dataKey="Remuneraciones" stackId="a" fill="#0f172a" radius={[0,0,4,4]} />
+                                    <Bar name="Hospedaje" dataKey="Hospedaje" stackId="a" fill="#10b981" radius={[4,4,0,0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm h-80">
+                            <h3 className="font-semibold mb-4">Tendencia Mensual</h3>
+                            <ResponsiveContainer width="100%" height="90%">
+                                <LineChart data={trendLineData}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                    <XAxis dataKey="name" />
+                                    <YAxis tickFormatter={(val) => new Intl.NumberFormat('es-MX', { notation: "compact" }).format(val)} />
+                                    <Tooltip content={<CustomTooltip />} />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="2023" stroke="#cbd5e1" dot={false} />
+                                    <Line type="monotone" dataKey="2024" stroke="#3b82f6" dot={false} />
+                                    <Line type="monotone" dataKey="2025" stroke="#0f172a" strokeWidth={2} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
